@@ -90,6 +90,12 @@ import java.lang.reflect.Type;
         ResourceMediaType.XMLA_CONNECTION_XML,
         ResourceMediaType.RESOURCE_LOOKUP_JSON,
         ResourceMediaType.RESOURCE_LOOKUP_XML,
+        ResourceMediaType.ADHOC_VIEW_METADATA_JSON,
+        ResourceMediaType.ADHOC_VIEW_METADATA_XML,
+        ResourceMediaType.ADHOC_VIEW_FIELDS_JSON,
+        ResourceMediaType.ADHOC_VIEW_FIELDS_XML,
+        ResourceMediaType.ADHOC_VIEW_FILTER_JSON,
+        ResourceMediaType.ADHOC_VIEW_FILTER_XML,
         "text/json",
         "text/xml"})
 @Produces({
@@ -147,6 +153,12 @@ import java.lang.reflect.Type;
         ResourceMediaType.XMLA_CONNECTION_XML,
         ResourceMediaType.RESOURCE_LOOKUP_JSON,
         ResourceMediaType.RESOURCE_LOOKUP_XML,
+        ResourceMediaType.ADHOC_VIEW_METADATA_JSON,
+        ResourceMediaType.ADHOC_VIEW_METADATA_XML,
+        ResourceMediaType.ADHOC_VIEW_FIELDS_JSON,
+        ResourceMediaType.ADHOC_VIEW_FIELDS_XML,
+        ResourceMediaType.ADHOC_VIEW_FILTER_JSON,
+        ResourceMediaType.ADHOC_VIEW_FILTER_XML,
         "text/json",
         "text/xml"})
 public class CustomRepresentationTypeProvider extends JacksonJaxbJsonProvider{

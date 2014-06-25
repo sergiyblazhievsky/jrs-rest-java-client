@@ -21,11 +21,13 @@
 
 package com.jaspersoft.jasperserver.jaxrs.client.core;
 
+import com.jaspersoft.jasperserver.dto.adhocview.ClientAdHocViewMetadata;
+import com.jaspersoft.jasperserver.dto.adhocview.metadata.ClientFieldMetadata;
+import com.jaspersoft.jasperserver.dto.adhocview.metadata.ClientFilterMetadata;
 import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.handling.DefaultErrorHandler;
 import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.OperationResult;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.jobs.*;
 import com.jaspersoft.jasperserver.jaxrs.client.filters.SessionOutputFilter;
-import com.sun.jersey.api.json.JSONConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glassfish.jersey.client.ClientProperties;
@@ -132,52 +134,46 @@ public class SessionStorage {
     /*public static void main(String[] args) throws InterruptedException {
 
         RestClientConfiguration configuration = new RestClientConfiguration("http://localhost:4444/jasperserver-pro/");
-        //RestClientConfiguration configuration = new RestClientConfiguration("http://localhost:4444/jasperserver/");
         JasperserverRestClient client = new JasperserverRestClient(configuration);
-        Session session = client.authenticate("jasperadmin|organization_1", "jasperadmin");
-        //Session session = client.authenticate("jasperadmin", "jasperadmin");
+        Session session = client.authenticate("superuser", "superuser");
 
-        Job job = new Job();
-        job.setLabel("Test Job");
-        job.setBaseOutputFilename("TestJobFile");
+        *//*OperationResult<ClientAdHocViewMetadata> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .get();*//*
 
-        JobSource source = new JobSource();
-        source.setReportUnitURI("/public/Samples/Reports/14.PerformanceSummary");
-        //source.setReportUnitURI("/reports/samples/EmployeeAccounts");
-        Map<String, Object> reportParameters = new HashMap<String, Object>();
-        reportParameters.put("Product_Family", Arrays.asList("Food"));
-        //reportParameters.put("EmployeeID", Arrays.asList("kristen"));
-        source.setParameters(reportParameters);
-        job.setSource(source);
+        *//*OperationResult<List<ClientFieldMetadata>> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .fields();*//*
 
-        SimpleTrigger trigger = new SimpleTrigger();
-        trigger.setOccurrenceCount(2);
-        trigger.setRecurrenceInterval(1000);
-        trigger.setRecurrenceIntervalUnit(IntervalUnitType.HOUR);
-        //trigger.setStartType(JobTrigger.START_TYPE_NOW);
-        //trigger.setStartDate(new Date());
-        job.setTrigger(trigger);
+        *//*OperationResult<ClientFieldMetadata> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .field("sales_fact_ALL.sales__store.sales__store__store_type");*//*
 
-        Set<OutputFormat> outputFormats = new HashSet<OutputFormat>(Arrays.asList(OutputFormat.PDF));
-        job.setOutputFormats(outputFormats);
+        *//*OperationResult<List<ClientFilterMetadata>> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .filters();*//*
 
-        RepositoryDestination repositoryDestination = new RepositoryDestination();
-        repositoryDestination.setFolderURI("/public/Samples/Reports");
-        repositoryDestination.setSaveToRepository(true);
-        job.setRepositoryDestination(repositoryDestination);
+        *//*OperationResult<ClientFilterMetadata> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .filter("filter_1")
+                .get()*//*;
 
-        OperationResult<Job> result = session
-                .jobsService()
-                .scheduleReport(job);
-        System.out.println(result.getEntity());
+        OperationResult<List<String>> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .filter("filter_1")
+                .values();
 
-
-        OperationResult<Job> jobOperationResult = session
-                .jobsService()
-                .job(3620)
-                .get();
-
-        System.out.println(jobOperationResult.getEntity());
+        try {
+            System.out.println(result.getEntity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }*/
 }

@@ -21,8 +21,16 @@
 
 package com.jaspersoft.jasperserver.jaxrs.client.core.operationresult;
 
+import com.jaspersoft.jasperserver.dto.adhocview.ClientAdHocViewMetadata;
+import com.jaspersoft.jasperserver.dto.adhocview.ClientAdHocViewTableMetadata;
+import com.jaspersoft.jasperserver.dto.adhocview.ClientClientAdHocViewChartMetadata;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.resources.ResourcesTypeResolverUtil;
+import com.jaspersoft.jasperserver.jaxrs.client.core.ResponseStatus;
+import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.JSClientException;
+import org.codehaus.jackson.map.util.JSONWrappedObject;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import javax.ws.rs.core.Response;
 
@@ -33,16 +41,19 @@ public class OperationResultFactoryImpl implements OperationResultFactory {
     public <T> OperationResult<T> getOperationResult(Response response, Class<T> responseClass) {
         if (isClientResource(responseClass))
             responseClass = (Class<T>) getSpecificResourceType(response);
+        if (isAdHocViewMetadata(responseClass))
+            responseClass = (Class<T>) getSpecificAdHocViewMetadataType(response);
 
         return getAppropriateOperationResultInstance(response, responseClass);
     }
 
     private <T> OperationResult<T> getAppropriateOperationResultInstance(Response response, Class<T> responseClass){
         OperationResult<T> result;
-        if (response.hasEntity())
+        //response.hasEntity() has wrong behaviour for some reason
+        if (response.bufferEntity() && response.getStatus() != ResponseStatus.NO_CONTENT && !response.readEntity(String.class).equals(""))
             result = new WithEntityOperationResult<T>(response, responseClass);
         else
-            result = new NullEntityOperationResult(response, responseClass);
+            result = new NullEntityOperationResult(response);
         return result;
     }
 
@@ -50,8 +61,28 @@ public class OperationResultFactoryImpl implements OperationResultFactory {
         return clazz != Object.class && clazz.isAssignableFrom(ClientResource.class);
     }
 
+    private boolean isAdHocViewMetadata(Class<?> clazz){
+        return clazz != Object.class && clazz.isAssignableFrom(ClientAdHocViewMetadata.class);
+    }
+
     private Class<? extends ClientResource> getSpecificResourceType(Response response){
         return ResourcesTypeResolverUtil.getClassForMime(response.getHeaderString("Content-Type"));
+    }
+
+    private Class<? extends ClientAdHocViewMetadata> getSpecificAdHocViewMetadataType(Response response){
+        if (response.bufferEntity()) {
+            JSONObject jsonObject = response.readEntity(JSONObject.class);
+            try {
+                String type = jsonObject.getString("type");
+                if (type.equals("table"))
+                    return ClientAdHocViewTableMetadata.class;
+                else
+                    return ClientClientAdHocViewChartMetadata.class;
+            } catch (JSONException e) {
+                throw new JSClientException("Unable to resolve AdHocViewMetadata type");
+            }
+        }
+        return ClientAdHocViewMetadata.class;
     }
 
 }

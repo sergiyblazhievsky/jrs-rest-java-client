@@ -19,16 +19,18 @@
  * along with this program.&nbsp; If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.jaspersoft.jasperserver.jaxrs.client.core.operationresult;
+package com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview;
 
-import javax.ws.rs.core.Response;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.AbstractAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.core.SessionStorage;
 
-public interface OperationResult<T> {
+public class AdHocMetadataService extends AbstractAdapter {
 
-    public T getEntity();
+    public AdHocMetadataService(SessionStorage sessionStorage) {
+        super(sessionStorage);
+    }
 
-    public String getSerializedContent();
-
-    public Response getResponse();
-
+    public AdHocViewMetadataApiAdapter view(String adHocViewUri){
+        return new AdHocViewMetadataApiAdapter(sessionStorage, adHocViewUri);
+    }
 }

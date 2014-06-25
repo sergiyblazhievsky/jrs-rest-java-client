@@ -24,15 +24,34 @@ package com.jaspersoft.jasperserver.jaxrs.client.core.operationresult;
 
 import javax.ws.rs.core.Response;
 
-public class NullEntityOperationResult<T> extends OperationResult<T> {
+public class NullEntityOperationResult<T> implements OperationResult<T> {
 
-    public NullEntityOperationResult(Response response, Class entityClass) {
-        super(response, entityClass);
+    private Response response;
+    private String serializedContent;
+
+    public NullEntityOperationResult(Response response) {
+        this.response = response;
     }
 
     @Override
     public T getEntity() {
         return null;
+    }
+
+    @Override
+    public String getSerializedContent() {
+        try {
+            if (serializedContent == null)
+                serializedContent = response.readEntity(String.class);
+            return serializedContent;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Response getResponse() {
+        return response;
     }
 
 }

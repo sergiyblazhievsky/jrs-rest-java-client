@@ -28,8 +28,9 @@ import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.OperationRe
 import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.OperationResultFactory;
 import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.OperationResultFactoryImpl;
 import com.jaspersoft.jasperserver.jaxrs.client.providers.CustomRepresentationTypeProvider;
-import com.sun.jersey.multipart.impl.MultiPartWriter;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.jettison.JettisonFeature;
+import org.glassfish.jersey.media.multipart.internal.MultiPartWriter;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -105,6 +106,7 @@ public class JerseyRequest<ResponseType> implements RequestBuilder<ResponseType>
         this.usersWebTarget = sessionStorage.getRootTarget().path("/rest_v2")
                 .register(CustomRepresentationTypeProvider.class)
                 .register(JacksonFeature.class)
+                .register(JettisonFeature.class)
                 .register(MultiPartWriter.class);
     }
 

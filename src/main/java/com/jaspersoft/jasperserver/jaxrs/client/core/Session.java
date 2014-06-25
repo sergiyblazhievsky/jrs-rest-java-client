@@ -22,6 +22,7 @@
 package com.jaspersoft.jasperserver.jaxrs.client.core;
 
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.AbstractAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview.AdHocMetadataService;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.authority.organizations.OrganizationsService;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.authority.roles.RolesService;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.authority.users.UsersService;
@@ -102,6 +103,10 @@ public class Session {
 
     public JobsService jobsService(){
         return getService(JobsService.class);
+    }
+
+    public AdHocMetadataService adHocMetadataService(){
+        return getService(AdHocMetadataService.class);
     }
 
 }

@@ -21,31 +21,26 @@
 
 package com.jaspersoft.jasperserver.jaxrs.client.core.operationresult;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-public class WithEntityOperationResult<T> implements OperationResult<T> {
+public class GenericEntityOperationResult<T> implements OperationResult<T> {
 
-    private Response response;
-    private Class<? extends T> entityClass;
-
-    protected T entity;
+    private final GenericType genericEntity;
+    private final Response response;
     private String serializedContent;
 
-    public WithEntityOperationResult(Response response, Class<? extends T> entityClass) {
+    public GenericEntityOperationResult(Response response, GenericType<T> genericEntity) {
         this.response = response;
-        this.entityClass = entityClass;
+        this.genericEntity = genericEntity;
     }
 
+    @Override
     public T getEntity() {
-        try {
-            if (entity == null)
-                entity = response.readEntity(entityClass);
-            return entity;
-        } catch (Exception e) {
-            return null;
-        }
+        return (T) response.readEntity(genericEntity);
     }
 
+    @Override
     public String getSerializedContent() {
         try {
             if (serializedContent == null)
@@ -56,8 +51,8 @@ public class WithEntityOperationResult<T> implements OperationResult<T> {
         }
     }
 
+    @Override
     public Response getResponse() {
         return response;
     }
-
 }
