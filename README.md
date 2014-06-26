@@ -59,6 +59,69 @@ Not to store session on server you can invalidate it with `logout()` method.
 session.logout();
 ```
 
+AdHoc metadata service
+=====================
+This service gives you possibility to get meta information for any adHoc view. You can get matadata about AdHoc view, about its fields and filters.
+
+```java
+        RestClientConfiguration configuration = new RestClientConfiguration("http://localhost:4444/jasperserver-pro/");
+        JasperserverRestClient client = new JasperserverRestClient(configuration);
+        Session session = client.authenticate("superuser", "superuser");
+```
+To get AdHoc view metadata use the code below:
+```java
+        OperationResult<ClientAdHocViewMetadata> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .get();
+```
+To get AdHoc view fields metadata use the code below:
+```java
+        OperationResult<List<ClientFieldMetadata>> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .fields();
+```
+if you need concrete field metadata use this code:
+```java
+OperationResult<ClientFieldMetadata> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .field("field_id");
+```
+To get AdHoc view filters metadata use the code below:
+```java
+        OperationResult<List<ClientFilterMetadata>> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .filters();
+```
+if you need concrete field metadata use this code:
+```java
+        OperationResult<ClientFilterMetadata> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .filter("filter_1")
+                .get();
+```
+if you need concrete field values use this code:
+```java
+        OperationResult<List<String>> result = session
+                .adHocMetadataService()
+                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+                .filter("filter_1")
+                .values();
+```
+Also you can get AdHocViewMetadata via resources service, to do this you need to specify AdHoc view URI and cast the result to `ClientAdhocDataView` type, see example below:
+```java
+        OperationResult<ClientResource> result = session
+                .resourcesService()
+                .resource("/public/audit/reports/Audit_Report_AdhocDataView")
+                .details();
+
+        ClientAdhocDataView adHocDataView = (ClientAdhocDataView) result.getEntity();
+```
+
 
 Report services
 ===============
