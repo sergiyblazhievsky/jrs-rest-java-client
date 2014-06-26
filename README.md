@@ -80,21 +80,24 @@ To get AdHoc view fields metadata use the code below:
         OperationResult<List<ClientFieldMetadata>> result = session
                 .adHocMetadataService()
                 .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .fields();
+                .fields()
+                .get();
 ```
 if you need concrete field metadata use this code:
 ```java
 OperationResult<ClientFieldMetadata> result = session
                 .adHocMetadataService()
                 .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .field("field_id");
+                .field("field_id")
+                .get();
 ```
 To get AdHoc view filters metadata use the code below:
 ```java
         OperationResult<List<ClientFilterMetadata>> result = session
                 .adHocMetadataService()
                 .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .filters();
+                .filters()
+                .get();
 ```
 if you need concrete field metadata use this code:
 ```java
@@ -110,7 +113,8 @@ if you need concrete field values use this code:
                 .adHocMetadataService()
                 .view("/public/audit/reports/Audit_Report_AdhocDataView")
                 .filter("filter_1")
-                .values();
+                .values()
+                .get();
 ```
 Also you can get AdHocViewMetadata via resources service, to do this you need to specify AdHoc view URI and cast the result to `ClientAdhocDataView` type, see example below:
 ```java
