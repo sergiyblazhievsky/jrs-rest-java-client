@@ -112,6 +112,16 @@ if you need concrete field values use this code:
                 .filter("filter_1")
                 .values();
 ```
+Also you can get AdHocViewMetadata via resources service, to do this you need to specify AdHoc view URI and cast the result to `ClientAdhocDataView` type, see example below:
+```java
+        OperationResult<ClientResource> result = session
+                .resourcesService()
+                .resource("/public/audit/reports/Audit_Report_AdhocDataView")
+                .details();
+
+        ClientAdhocDataView adHocDataView = (ClientAdhocDataView) result.getEntity();
+```
+
 
 Report services
 ===============
