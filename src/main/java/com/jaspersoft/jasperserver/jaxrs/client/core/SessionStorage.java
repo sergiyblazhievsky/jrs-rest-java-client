@@ -24,6 +24,8 @@ package com.jaspersoft.jasperserver.jaxrs.client.core;
 import com.jaspersoft.jasperserver.dto.adhocview.ClientAdHocViewMetadata;
 import com.jaspersoft.jasperserver.dto.adhocview.metadata.ClientFieldMetadata;
 import com.jaspersoft.jasperserver.dto.adhocview.metadata.ClientFilterMetadata;
+import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
+import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.handling.DefaultErrorHandler;
 import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.OperationResult;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.jobs.*;
@@ -137,40 +139,51 @@ public class SessionStorage {
         JasperserverRestClient client = new JasperserverRestClient(configuration);
         Session session = client.authenticate("superuser", "superuser");
 
-        *//*OperationResult<ClientAdHocViewMetadata> result = session
-                .adHocMetadataService()
-                .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .get();*//*
+//        OperationResult<ClientAdHocViewMetadata> result = session
+//                .adHocMetadataService()
+//                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+//                .get();
+//
+//        OperationResult<List<ClientFieldMetadata>> result = session
+//                .adHocMetadataService()
+//                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+//                .fields()
+//                .get();
+//
+//        OperationResult<ClientFieldMetadata> result = session
+//                .adHocMetadataService()
+//                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+//                .field("sales_fact_ALL.sales__store.sales__store__store_type")
+//                .get();
+//
+//        OperationResult<List<ClientFilterMetadata>> result = session
+//                .adHocMetadataService()
+//                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+//                .filters()
+//                .get();
+//
+//        OperationResult<ClientFilterMetadata> result = session
+//                .adHocMetadataService()
+//                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+//                .filter("filter_1")
+//                .get();
 
-        *//*OperationResult<List<ClientFieldMetadata>> result = session
-                .adHocMetadataService()
-                .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .fields();*//*
+//        OperationResult<List<String>> result = session
+//                .adHocMetadataService()
+//                .view("/public/audit/reports/Audit_Report_AdhocDataView")
+//                .filter("filter_1")
+//                .values()
+//                .get();
 
-        *//*OperationResult<ClientFieldMetadata> result = session
-                .adHocMetadataService()
-                .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .field("sales_fact_ALL.sales__store.sales__store__store_type");*//*
-
-        *//*OperationResult<List<ClientFilterMetadata>> result = session
-                .adHocMetadataService()
-                .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .filters();*//*
-
-        *//*OperationResult<ClientFilterMetadata> result = session
-                .adHocMetadataService()
-                .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .filter("filter_1")
-                .get()*//*;
-
-        OperationResult<List<String>> result = session
-                .adHocMetadataService()
-                .view("/public/audit/reports/Audit_Report_AdhocDataView")
-                .filter("filter_1")
-                .values();
+//        OperationResult<ClientResource> result = session
+//                .resourcesService()
+//                .resource("/public/audit/reports/Audit_Report_AdhocDataView")
+//                .details();
+//
+//        ClientAdhocDataView adHocDataView = (ClientAdhocDataView) result.getEntity();
 
         try {
-            System.out.println(result.getEntity());
+//            System.out.println(result.getEntity());
         } catch (Exception e) {
             e.printStackTrace();
         }

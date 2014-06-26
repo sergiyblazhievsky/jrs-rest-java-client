@@ -19,10 +19,11 @@
  * along with this program.&nbsp; If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview;
+package com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview.filters;
 
 import com.jaspersoft.jasperserver.dto.adhocview.metadata.ClientFilterMetadata;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.AbstractAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview.AdHocViewParameter;
 import com.jaspersoft.jasperserver.jaxrs.client.core.JerseyRequest;
 import com.jaspersoft.jasperserver.jaxrs.client.core.MimeTypeUtil;
 import com.jaspersoft.jasperserver.jaxrs.client.core.SessionStorage;
@@ -31,41 +32,41 @@ import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.NullEntityO
 import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.OperationResult;
 
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
 
-public class AdHocViewFilterMetadataAdapter extends AbstractAdapter {
+public class BatchAdHocViewFilterMetadataApiAdapter extends AbstractAdapter {
 
-    private final String id;
+    private final MultivaluedMap<String, String> params;
     private final String adHocViewUri;
 
-    public AdHocViewFilterMetadataAdapter(SessionStorage sessionStorage, String adHocViewUri, String id) {
+    public BatchAdHocViewFilterMetadataApiAdapter(SessionStorage sessionStorage, String adHocViewUri) {
         super(sessionStorage);
         this.adHocViewUri = adHocViewUri;
-        this.id = id;
+        params = new MultivaluedHashMap<String, String>();
     }
 
-    public OperationResult<ClientFilterMetadata> get(){
-        JerseyRequest<ClientFilterMetadata> request = JerseyRequest.buildRequest(sessionStorage,
-                ClientFilterMetadata.class,
-                new String[]{"/resources", adHocViewUri, "/filters", id});
+    public BatchAdHocViewFilterMetadataApiAdapter parameter(AdHocViewParameter parameter, String value){
+        params.add(parameter.getParamName(), value);
+        return this;
+    }
+
+    public OperationResult<List<ClientFilterMetadata>> get() {
+        JerseyRequest<List> request = JerseyRequest.buildRequest(sessionStorage,
+                List.class,
+                new String[]{"/resources", adHocViewUri, "/filters"});
 
         String acceptMime = MimeTypeUtil.toCorrectAcceptMime(sessionStorage.getConfiguration(), "application/adhocDataView.filter+{mime}");
         request.setAccept(acceptMime);
-
-        return request.get();
-    }
-
-    public OperationResult<List<String>> values(){
-        JerseyRequest<List> request = JerseyRequest.buildRequest(sessionStorage,
-                List.class,
-                new String[]{"/resources", adHocViewUri, "/filters", id, "/values"});
+        request.addParams(params);
 
         OperationResult<List> operationResult = request.get();
-        OperationResult<List<String>> result;
+        OperationResult<List<ClientFilterMetadata>> result;
         if (!(operationResult instanceof NullEntityOperationResult))
-            result = new GenericEntityOperationResult<List<String>>(operationResult.getResponse(), new GenericType<List<String>>(){});
+            result = new GenericEntityOperationResult<List<ClientFilterMetadata>>(operationResult.getResponse(), new GenericType<List<ClientFilterMetadata>>(){});
         else
-            result = new NullEntityOperationResult<List<String>>(operationResult.getResponse());
+            result = new NullEntityOperationResult<List<ClientFilterMetadata>>(operationResult.getResponse());
 
         return result;
     }

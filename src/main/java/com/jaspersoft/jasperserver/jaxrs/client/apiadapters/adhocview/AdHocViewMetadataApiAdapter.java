@@ -25,6 +25,10 @@ import com.jaspersoft.jasperserver.dto.adhocview.ClientAdHocViewMetadata;
 import com.jaspersoft.jasperserver.dto.adhocview.metadata.ClientFieldMetadata;
 import com.jaspersoft.jasperserver.dto.adhocview.metadata.ClientFilterMetadata;
 import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.AbstractAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview.fields.BatchAdHocViewFieldMetadataApiAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview.fields.SingleAdHocViewFieldMetadataApiAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview.filters.BatchAdHocViewFilterMetadataApiAdapter;
+import com.jaspersoft.jasperserver.jaxrs.client.apiadapters.adhocview.filters.SingleAdHocViewFilterMetadataApiAdapter;
 import com.jaspersoft.jasperserver.jaxrs.client.core.JerseyRequest;
 import com.jaspersoft.jasperserver.jaxrs.client.core.MimeTypeUtil;
 import com.jaspersoft.jasperserver.jaxrs.client.core.SessionStorage;
@@ -69,55 +73,20 @@ public class AdHocViewMetadataApiAdapter extends AbstractAdapter {
         return request.put(adHocViewMetadata);
     }
 
-    public OperationResult<List<ClientFieldMetadata>> fields() {
-        JerseyRequest<List> request = JerseyRequest.buildRequest(sessionStorage,
-                List.class,
-                new String[]{"/resources", adHocViewUri, "/fields"});
-
-        String acceptMime = MimeTypeUtil.toCorrectAcceptMime(sessionStorage.getConfiguration(), "application/adhocDataView.field+{mime}");
-        request.setAccept(acceptMime);
-
-        OperationResult<List> operationResult = request.get();
-        OperationResult<List<ClientFieldMetadata>> result;
-        if (!(operationResult instanceof NullEntityOperationResult))
-            result = new GenericEntityOperationResult<List<ClientFieldMetadata>>(operationResult.getResponse(), new GenericType<List<ClientFieldMetadata>>(){});
-        else
-            result = new NullEntityOperationResult<List<ClientFieldMetadata>>(operationResult.getResponse());
-
-        return result;
+    public BatchAdHocViewFieldMetadataApiAdapter fields() {
+        return new BatchAdHocViewFieldMetadataApiAdapter(sessionStorage, adHocViewUri);
     }
 
-    public OperationResult<ClientFieldMetadata> field(String id) {
-        JerseyRequest<ClientFieldMetadata> request = JerseyRequest.buildRequest(sessionStorage,
-                ClientFieldMetadata.class,
-                new String[]{"/resources", adHocViewUri, "/fields", id});
-
-        String acceptMime = MimeTypeUtil.toCorrectAcceptMime(sessionStorage.getConfiguration(), "application/adhocDataView.field+{mime}");
-        request.setAccept(acceptMime);
-
-        return request.get();
+    public SingleAdHocViewFieldMetadataApiAdapter field(String id) {
+        return new SingleAdHocViewFieldMetadataApiAdapter(sessionStorage, adHocViewUri, id);
     }
 
-    public OperationResult<List<ClientFilterMetadata>> filters() {
-        JerseyRequest<List> request = JerseyRequest.buildRequest(sessionStorage,
-                List.class,
-                new String[]{"/resources", adHocViewUri, "/filters"});
-
-        String acceptMime = MimeTypeUtil.toCorrectAcceptMime(sessionStorage.getConfiguration(), "application/adhocDataView.filter+{mime}");
-        request.setAccept(acceptMime);
-
-        OperationResult<List> operationResult = request.get();
-        OperationResult<List<ClientFilterMetadata>> result;
-        if (!(operationResult instanceof NullEntityOperationResult))
-            result = new GenericEntityOperationResult<List<ClientFilterMetadata>>(operationResult.getResponse(), new GenericType<List<ClientFilterMetadata>>(){});
-        else
-            result = new NullEntityOperationResult<List<ClientFilterMetadata>>(operationResult.getResponse());
-
-        return result;
+    public BatchAdHocViewFilterMetadataApiAdapter filters() {
+        return new BatchAdHocViewFilterMetadataApiAdapter(sessionStorage, adHocViewUri);
     }
 
-    public AdHocViewFilterMetadataAdapter filter(String id) {
-        return new AdHocViewFilterMetadataAdapter(sessionStorage, adHocViewUri, id);
+    public SingleAdHocViewFilterMetadataApiAdapter filter(String id) {
+        return new SingleAdHocViewFilterMetadataApiAdapter(sessionStorage, adHocViewUri, id);
     }
 
 }
